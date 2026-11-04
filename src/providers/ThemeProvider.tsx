@@ -1,18 +1,31 @@
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+} from "react";
 
-// 1. Create context
-const ThemeContext = createContext(null);
+type Theme = "light" | "dark";
 
-// 2. Create provider component
-export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("light");
+type ThemeContextValue = {
+  theme: Theme;
+  setTheme: Dispatch<SetStateAction<Theme>>;
+  toggleTheme: () => void;
+  isDark: boolean;
+};
+
+const ThemeContext = createContext<ThemeContextValue | null>(null);
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<Theme>("light");
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
-  // Value can be any type: object, array, function, etc.
-  const value = {
+  const value: ThemeContextValue = {
     theme,
     setTheme,
     toggleTheme,
